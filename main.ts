@@ -40,7 +40,7 @@ export class LaTeXToUnicodeModal extends Modal {
     contentEl.createEl("h1", { text: "LaTeX to Unicode" });
 
     const elContainer = contentEl.createEl('table');
-    elContainer.className = 'inputTable';
+    elContainer.className = 'latexInputTable';
     const first = elContainer.createEl('tr');
     first.createEl('td', {text: 'LaTeX command'});
     const elInput = first.createEl('td').createEl('input', {type: 'text'});
