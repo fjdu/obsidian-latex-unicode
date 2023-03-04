@@ -7,4 +7,4 @@ Obsidian supports LaTeX, but there are cases where Unicode symbols suffice.
 Run command `LaTeX to Unicode`.  In the pop-up box, type in the LaTeX commands, then insert the conversion results.
 
 ## Acknowledgment
-- This plugin is based on data provided by [unicodeit](https://www.unicodeit.net/), specifically [this file](https://github.com/svenkreiss/unicodeit/blob/master/ts_src/data.ts).
+- This plugin is based on [unicodeit](https://www.unicodeit.net/), specifically [this GitHub repository](https://github.com/svenkreiss/unicodeit/).

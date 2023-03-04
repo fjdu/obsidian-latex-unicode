@@ -1,7 +1,11 @@
-#userInput, #resDisp {
+table, #userInput, #resDisp {
   width: 100%;
 }
 
-.inputTable td {
-  width: 50%;
+.inputTable td:first-child {
+  width: 30%;
+}
+
+.inputTable td:last-child {
+  width: 70%;
 }

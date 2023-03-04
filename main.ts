@@ -1,4 +1,4 @@
-import { App, Editor, MarkdownView, Menu, Modal, Notice, Plugin, PluginSettingTab, Setting, sanitizeHTMLToDom } from 'obsidian';
+import { App, Editor, Modal, Notice, Plugin, Setting, sanitizeHTMLToDom } from 'obsidian';
 import { replacements, combiningmarks, subsuperscripts } from './data.ts';
 
 export default class LaTeXtoUnicode extends Plugin {
