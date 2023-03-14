@@ -30,4 +30,4 @@ Output: ℕ ≡ {1, 2, 3, …}
 ```
 
 ## Acknowledgment
-- This plugin is based on [unicodeit](https://www.unicodeit.net/), specifically [this GitHub repository](https://github.com/svenkreiss/unicodeit/).
+- This plugin is based on [unicodeit](https://www.unicodeit.net/), specifically [this GitHub repository](https://github.com/svenkreiss/unicodeit/).  The licenses and source code of `unicodeit` are included in the directory `unicodeit`.
