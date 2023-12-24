@@ -1,4 +1,4 @@
-import { App, Editor, Modal, Notice, Plugin, Setting, TextComponent, sanitizeHTMLToDom } from 'obsidian';
+import { App, Editor, Modal, EditorTransaction, Plugin, Setting, TextComponent, sanitizeHTMLToDom } from 'obsidian';
 import { replacements, combiningmarks, subsuperscripts } from './data.ts';
 
 export default class LaTeXtoUnicode extends Plugin {
@@ -21,12 +21,11 @@ export default class LaTeXtoUnicode extends Plugin {
 function insertRange(editor : Editor, text : string)
 {
   var pos = editor.getCursor()
-  editor.setCursor(pos.line,pos.ch+1) // Advance the cursor forwards by 1
+  var offset = editor.posToOffset(pos);
 
   editor.replaceRange(text, pos); // Replace (cursor will be pushed by the length of the text)
 
-  var newPos = editor.getCursor()
-  editor.setCursor(newPos.line,newPos.ch - 1) // Go back by one, resulting in the position after the replace
+  editor.setCursor(editor.offsetToPos(offset+text.length)) // Go back by one, resulting in the position after the replace
 }
 
 export class LaTeXToUnicodeModal extends Modal {
