@@ -1,4 +1,4 @@
-import { App, Editor, Modal, Notice, Plugin, Setting, sanitizeHTMLToDom } from 'obsidian';
+import { App, Editor, Modal, Notice, Plugin, Setting, TextComponent, sanitizeHTMLToDom } from 'obsidian';
 import { replacements, combiningmarks, subsuperscripts } from './data.ts';
 
 export default class LaTeXtoUnicode extends Plugin {
@@ -9,9 +9,7 @@ export default class LaTeXtoUnicode extends Plugin {
       editorCallback: (editor: Editor) => {
 
         const onSubmit = (res: string) => {
-          const pos = editor.getCursor();
-          editor.replaceRange(`${res}`, pos);
-          editor.setCursor(pos);
+          insertRange(editor,res)
         };
 
         new LaTeXToUnicodeModal(this.app, onSubmit).open();
@@ -20,6 +18,16 @@ export default class LaTeXtoUnicode extends Plugin {
   }
 }
 
+function insertRange(editor : Editor, text : string)
+{
+  var pos = editor.getCursor()
+  editor.setCursor(pos.line,pos.ch+1) // Advance the cursor forwards by 1
+
+  editor.replaceRange(text, pos); // Replace (cursor will be pushed by the length of the text)
+
+  var newPos = editor.getCursor()
+  editor.setCursor(newPos.line,newPos.ch - 1) // Go back by one, resulting in the position after the replace
+}
 
 export class LaTeXToUnicodeModal extends Modal {
   res: string;
@@ -38,22 +46,35 @@ export class LaTeXToUnicodeModal extends Modal {
     const { contentEl } = this;
 
     contentEl.createEl("h1", { text: "LaTeX to Unicode" });
+    type Action = () => {}
+    var valueChanged : Action
 
-    const elContainer = contentEl.createEl('table');
-    elContainer.className = 'latexInputTable';
-    const first = elContainer.createEl('tr');
-    first.createEl('td', {text: 'LaTeX command'});
-    const elInput = first.createEl('td').createEl('input', {type: 'text'});
-    elInput.id = 'userInput';
-    elInput.addEventListener("input", (e) => {
-      this.res = replace(e.target.value);
-      document.getElementById('resDisp').value = this.res;
-    });
-    const second = elContainer.createEl('tr');
-    second.createEl('td', {text: 'Result'});
-    const elRes = second.createEl('td').createEl('input', {type: 'text'});
-    elRes.id = 'resDisp';
-    elRes.readOnly = true;
+    new Setting(contentEl)
+      .setName("LaTeX command")
+      .addText((text)=>
+        text.onChange((value) => {
+          this.res = replace(value)
+          valueChanged?.()
+        })
+        .inputEl
+        .addEventListener('keypress',
+        (e) => {
+          if(e.key == "Enter")
+          {
+            this.onSubmit(this.res)
+            this.close()
+          }
+        })
+      )
+      
+        
+
+    new Setting(contentEl)
+      .setName("Result")
+      .addText((text) => {
+        text.setDisabled(true)
+        valueChanged = () => text.setValue(this.res)
+      })
 
     new Setting(contentEl).addButton((btn) =>
       btn
