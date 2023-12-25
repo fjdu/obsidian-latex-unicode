@@ -7,7 +7,6 @@ export default class LaTeXtoUnicode extends Plugin {
       id: "latex-to-unicode",
       name: "LaTeX to Unicode",
       editorCallback: (editor: Editor) => {
-
         const onSubmit = (res: string) => {
           insertRange(editor,res)
         };
@@ -23,13 +22,13 @@ function insertRange(editor : Editor, text : string)
   var pos = editor.getCursor()
   var offset = editor.posToOffset(pos);
 
-  editor.replaceRange(text, pos); // Replace (cursor will be pushed by the length of the text)
+  editor.replaceRange(text, pos); // Replace (cursor will NOT be pushed by the length of the text)
 
-  editor.setCursor(editor.offsetToPos(offset+text.length)) // Go back by one, resulting in the position after the replace
+  editor.setCursor(editor.offsetToPos(offset+text.length)) // Go forward to the end of the replace, for the "insert" effect
 }
 
 export class LaTeXToUnicodeModal extends Modal {
-  res: string;
+  res: string = "";
 
   onSubmit: (res: string) => void;
 
@@ -56,8 +55,8 @@ export class LaTeXToUnicodeModal extends Modal {
           valueChanged?.()
         })
         .inputEl
-        .addEventListener('keypress',
-        (e) => {
+        .addEventListener('keyup',
+        (e : KeyboardEvent) => {
           if(e.key == "Enter")
           {
             this.onSubmit(this.res)
